@@ -1,0 +1,207 @@
+﻿@model PagedList.IPagedList<MVCDatabaseFirstProject_TrainingAcademy.Models.ViewModel.StudentViewModel>
+@using PagedList.Mvc
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<div class="container-fluid">
+    <div class="m-5">
+        <div class="row">
+            <h2>Index</h2>
+            <div class="col-md-6">
+                <div class="btnCreate">
+                    <a href="#" class="btn btn-warning" name="details"
+                       data-bs-toggle="modal" data-bs-target="#studentCreate">Create New</a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="btnSearch">
+                    @using (Html.BeginForm("Index", "Students", FormMethod.Get))
+                    {
+                        <p>
+                            Search By : @Html.TextBox("SearchString")
+                            <input type="submit" value="Search" class="btn btn-info" />
+                        </p>
+                    }
+                </div>
+            </div>
+            <table class="table table-bordered table-active table-hover">
+                <tr>
+                    <th>Student Id</th>
+                    <th>@Html.ActionLink("Student Name", "Index", new { SortOrder = ViewBag.SortNameParam })</th>
+                    <th>Email Address</th>
+                    <th>Admission Date</th>
+                    <th>Image</th>
+                    <th>Image Name</th>
+                    <th>Training Id</th>
+                    <th>Training Name</th>
+                    <th>Trainer Id</th>
+                    <th>Trainer Name</th>
+                    <th>Training Cost</th>
+                    <th>Operations</th>
+                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.StudentId)</td>
+                        <td>@Html.DisplayFor(modelItem => item.StudentName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                        <td>
+                            @Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.AdmissionDate))
+                        </td>
+                        <td>
+                            <img src="@Url.Content(item.ImageUrl)" alt="@item.ImageName" width="60" height="60" />
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.ImageName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.TrainingId)</td>
+                        <td>@Html.DisplayFor(modelItem => item.TrainingName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.TrainerId)</td>
+                        <td>@Html.DisplayFor(modelItem => item.TrainerName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.TrainingCost)</td>
+                        <td>
+
+                            <a href="#" class="btn btn-success" name="details"
+                               onclick='EditRecord("+@item.StudentId+")' data-bs-toggle="modal" data-bs-target="#EditModal">Edit</a>
+                            <a href="#" class="btn btn-danger" name="details"
+                               onclick='DeleteRecord("+@item.StudentId+")' data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</a>
+                            <a href="#" class="btn btn-primary" name="details"
+                               onclick='DetailsRecord("+@item.StudentId+")' data-bs-toggle="modal" data-bs-target="#studentDetails">Details</a>
+                        </td>
+                    </tr>
+                }
+            </table>
+            Page@(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            @Html.PagedListPager(Model, Page => Url.Action("Index", new { Page, SortOrder = ViewBag.CurrrentSort, CurrentFilter = ViewBag.CurrentFilter }))
+            <div class="modal fade" id="studentCreate" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        @*<div class="modal-header">
+                            <h5 class="modal-title" id="detailsModalLabel">Student Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>*@
+                        <div class="modal-body bg-light">
+                            @{Html.RenderAction("Create"); }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="studentDetails" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="detailsModalLabel">Student Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="DetailspartialDiv">
+                                @if (ViewBag.Details == "Show")
+                                {
+                                    @Html.Partial("_DetailsRecord", Model);
+                                    ViewBag.Details = "";
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function DetailsRecord(studentId) {
+        $.ajax({
+            url: "/Students/Details?id=" + studentId,
+            type: "GET",
+            data: "",
+            contentType: 'application/json;charset=utf-8',
+            success: function (data) {
+                $('#DetailspartialDiv').show();
+                $('#DetailspartialDiv').html(data);
+            },
+            error: function () {
+                alert("Error Occured")
+            }
+        });
+    }
+</script>
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel">Student Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="DeletepartialDiv">
+                    @if (ViewBag.Delete == "StudentDelete")
+                    {
+                        @Html.Partial("_DeletePartial", Model);
+                        ViewBag.Delete = "";
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function DeleteRecord(studentId) {
+        $.ajax({
+            url: "/Students/Delete?id=" + studentId,
+            type: "GET",
+            data: "",
+            contentType: 'application/json;charset=utf-8',
+            success: function (data) {
+                $('#DeletepartialDiv').show();
+                $('#DeletepartialDiv').html(data);
+
+            },
+            error: function () {
+                alert("Error Occured")
+            }
+        });
+    }
+</script>
+<div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel">Student Edit</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="EditpartialDiv">
+                    @if (ViewBag.Edit == "StudentEdit")
+                    {
+                        @Html.Partial("_EditPartial", Model);
+                        ViewBag.Edit = "";
+                    }
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function EditRecord(studentId) {
+        $.ajax({
+            url: "/Students/Edit?id=" + studentId,
+            type: "GET",
+            data: "",
+            contentType: 'application/json;charset=utf-8',
+            success: function (data) {
+                $('#EditpartialDiv').show();
+                $('#EditpartialDiv').html(data);
+
+            },
+            error: function () {
+                alert("Error Occured")
+            }
+        });
+    }
+</script>
+<p>
+    <a class="btn btn-info" href="@Url.Action("ExportReport")">Download Students</a>
+</p>

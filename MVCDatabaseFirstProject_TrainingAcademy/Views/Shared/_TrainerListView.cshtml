@@ -1,0 +1,19 @@
+﻿@model IEnumerable<MVCDatabaseFirstProject_TrainingAcademy.Models.Trainer>
+
+<div>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Trainer Id</th>
+            <th>Trainer Name</th>
+            <th>Phone</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.TrainerId</td>
+                <td>@item.TrainerName</td>
+                <td>@item.PhoneNumber</td>
+            </tr>
+        }
+    </table>
+</div>

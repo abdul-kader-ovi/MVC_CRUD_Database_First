@@ -1,0 +1,32 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>TrainerAjaxFormExample</title>
+</head>
+<body>
+    <div>
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>Trainer ID</th>
+                <th>Trainer Name</th>
+                <th>Phone</th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.TrainerId</td>
+                    <td>@item.TrainerName</td>
+                    <td>@item.PhoneNumber</td>
+                </tr>
+            }
+        </table>
+    </div>
+</body>
+</html>

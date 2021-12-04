@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f79cbeb420f84998b26fca0c61f2b8b2" Name="Diagram1">
+        <EntityTypeShape EntityType="DBFirstTrainingDBModel.Student" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBFirstTrainingDBModel.tblRole" Width="1.5" PointX="8" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBFirstTrainingDBModel.tblUser" Width="1.5" PointX="5.75" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBFirstTrainingDBModel.Trainer" Width="1.5" PointX="0.75" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBFirstTrainingDBModel.Training" Width="1.5" PointX="0.75" PointY="5.625" IsExpanded="true" />
+        <AssociationConnector Association="DBFirstTrainingDBModel.FK_dbo_Students_dbo_Trainers_TrainerId" ManuallyRouted="false" />
+        <AssociationConnector Association="DBFirstTrainingDBModel.FK_dbo_Students_dbo_Trainings_TrainingId" ManuallyRouted="false" />
+        <AssociationConnector Association="DBFirstTrainingDBModel.FK_tblRole_tblUser" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
